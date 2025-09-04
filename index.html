@@ -3,58 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio de Proyectos</title>
-    <!-- Incluye el CDN de Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Incluye el font Inter de Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Portafolio Futurista 3D | Desarrollo Web Avanzado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d0d0d;
-            color: #f0f0f0;
-            overflow-x: hidden; /* Permite el scroll vertical y oculta el horizontal */
-        }
-
-        /* Define los colores y el tema futurista */
         :root {
-            --primary-red: #ff3366;
-            --secondary-red: #cc0033;
-            --text-color: #f0f0f0;
-            --background-color: #0d0d0d;
-            --card-bg: #1a1a1a;
-            --border-glow: #ff0055;
+            --primary: #ff003c;
+            --primary-dark: #cc002f;
+            --secondary: #0a0a1a;
+            --accent: #00f7ff;
+            --morado: #9d00ff;
+            --gold: #FFD700; /* Nuevo color dorado para el contraste */
+            --text: #ffffff;
+            --text-secondary: #a0a0b0;
+            --card-bg: rgba(20, 20, 40, 0.7);
+            --glow-primary: 0 0 10px rgba(255, 0, 60, 0.7), 0 0 20px rgba(255, 0, 60, 0.5);
+            --glow-secondary: 0 0 10px rgba(0, 229, 255, 0.7), 0 0 20px rgba(0, 229, 255, 0.5);
+            --glow-accent: 0 0 10px rgba(255, 0, 229, 0.7), 0 0 20px rgba(255, 0, 229, 0.5);
         }
 
-        /* Animación de Glitch para los títulos */
-        .glitch-text {
-            animation: glitch-anim 2s infinite linear alternate;
-        }
-        @keyframes glitch-anim {
-            0% { text-shadow: 2px 2px var(--secondary-red), -2px -2px var(--primary-red); }
-            25% { text-shadow: -2px 2px var(--secondary-red), 2px -2px var(--primary-red); }
-            50% { text-shadow: -2px -2px var(--secondary-red), 2px 2px var(--primary-red); }
-            75% { text-shadow: 2px -2px var(--secondary-red), -2px 2px var(--primary-red); }
-            100% { text-shadow: 2px 2px var(--secondary-red), -2px -2px var(--primary-red); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Animación de brillo para los botones */
-        .neon-button {
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 0 5px var(--border-glow), 0 0 10px var(--border-glow);
-            text-shadow: 0 0 2px var(--text-color);
+        body, html {
+            height: 100%;
+            font-family: 'Chakra Petch', sans-serif;
+            background-color: var(--secondary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
         }
-        .neon-button:hover {
-            box-shadow: 0 0 10px var(--border-glow), 0 0 20px var(--border-glow), 0 0 30px var(--border-glow);
+
+        /* Animación de fondo */
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(45deg, var(--morado), var(--primary), var(--secondary));
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            filter: brightness(0.8);
+        }
+        
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header y Navegación */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 26, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--morado), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px var(--morado);
+            animation: pulse 3s infinite alternate;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--morado), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px var(--morado);
+            animation: pulse 3s infinite alternate;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--morado), var(--primary-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(157, 0, 255, 0.6);
+        }
+
+        /* Projects Section */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            display: inline-block;
+            padding-bottom: 10px;
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            /* Animación para el texto "Proyectos Destacados" */
+            background: linear-gradient(45deg, var(--morado), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow-title 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow-title {
+            0% { text-shadow: 0 0 10px var(--morado); }
+            100% { text-shadow: 0 0 10px var(--primary); }
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gold); /* Color dorado para resaltar */
+        }
+
+        .projects {
+            padding: 100px 0;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Memory Cards Style */
+        .memory-card {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .memory-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .memory-card:hover .card-inner {
+            transform: translateZ(20px);
+        }
+
+        .memory-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, rgba(30, 30, 60, 0.8), rgba(20, 20, 40, 0.9));
+            border: 1px solid rgba(157, 0, 255, 0.3);
+            transform-style: preserve-3d;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.9), rgba(30, 30, 60, 0.8));
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            transform: rotateY(180deg);
+        }
+
+        .card-content {
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .project-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .status-completed {
+            background: rgba(0, 247, 255, 0.2);
+            color: var(--accent);
+        }
+
+        .status-production {
+            background: rgba(255, 0, 60, 0.2);
+            color: var(--primary);
+        }
+
+        .memory-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .memory-image {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .memory-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .memory-card:hover .memory-image img {
             transform: scale(1.05);
-            background-color: var(--primary-red);
         }
 
-        /* Animación de fondo: partículas flotantes */
-        .particles-bg {
-            position: fixed; /* Asegura que el fondo no se mueva al hacer scroll */
+        .glitch-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 65%, rgba(157, 0, 255, 0.3) 70%, transparent 75%);
+            background-size: 200% 200%;
+            animation: glitch 3s linear infinite;
+            z-index: 1;
+        }
+
+        .memory-preview {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .card-back .card-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: auto;
+        }
+
+        .project-link i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover i {
+            transform: translateX(5px);
+        }
+
+        .card-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(157, 0, 255, 0.1), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .memory-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            padding: 50px 0 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 0, 60, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .social-links li {
+            margin: 0 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes glitch {
+            0% { background-position: 0 0; }
+            25% { background-position: 100% 0; }
+            50% { background-position: 100% 100; }
+            75% { background-position: 0 100%; }
+            100% { background-position: 0 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* Efectos de partículas */
+        .particles {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -62,147 +517,258 @@
             overflow: hidden;
             z-index: -1;
         }
+
         .particle {
             position: absolute;
-            background-color: var(--primary-red);
+            background: var(--primary);
             border-radius: 50%;
-            animation: move-particles 10s infinite ease-in-out;
-            opacity: 0.5;
-            box-shadow: 0 0 5px var(--primary-red);
+            opacity: 0.8; /* Opacidad aumentada */
+            animation: float 10s infinite linear;
         }
 
-        @keyframes move-particles {
-            0% { transform: translateY(0) scale(1); opacity: 0.5; }
-            50% { transform: translateY(-50vh) scale(1.2); opacity: 0.8; }
-            100% { transform: translateY(0) scale(1); opacity: 0.5; }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .memory-card {
+                height: 380px;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-center items-center p-4 md:p-8 relative">
+<body>
+    <!-- Fondo animado con degradado -->
+    <div class="animated-background"></div>
 
-    <!-- Contenedor para el fondo animado de partículas -->
-    <div class="particles-bg"></div>
+    <!-- Partículas de fondo -->
+    <div class="particles" id="particles"></div>
 
-    <main class="w-full max-w-5xl mx-auto z-10">
-        <!-- Sección de encabezado -->
-        <header class="text-center mb-12 md:mb-20">
-            <h1 class="text-5xl md:text-7xl font-bold glitch-text mb-4">Portafolio Web</h1>
-            <p class="text-xl md:text-2xl text-red-300">Creando soluciones digitales con tecnología y estilo</p>
-        </header>
-
-        <!-- Sección de presentación -->
-        <section class="bg-zinc-900 rounded-2xl shadow-xl p-6 md:p-10 mb-12 md:mb-20 border-2 border-red-500">
-            <h2 class="text-2xl md:text-4xl font-bold text-red-400 mb-4">Proyectos destacados</h2>
-            <p class="text-lg text-gray-300">
-                A continuación, se presentan algunos de nuestros proyectos más recientes. Cada uno ha sido desarrollado con un servidor y una base de datos personalizados, garantizando un control total y una plataforma robusta para un futuro crecimiento y la optimización de campañas de marketing digital como Google Ads.
-            </p>
-        </section>
-
-        <!-- Contenedor para los proyectos -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            <!-- Proyecto: Asterixs -->
-            <div class="bg-zinc-900 rounded-2xl shadow-xl p-6 md:p-8 flex flex-col items-center border-2 border-red-500">
-                <div class="w-full h-48 bg-cover bg-center rounded-xl mb-4" style="background-image: url('https://placehold.co/800x600/1a1a1a/ff3366?text=Asterixs');"></div>
-                <h3 class="text-xl md:text-2xl font-bold text-red-400 mb-2">Asterixs E-commerce</h3>
-                <span class="text-green-400 font-bold mb-4">Estado: Terminada</span>
-                <p class="text-gray-300 text-center flex-grow mb-4">
-                    Página de e-commerce completa con un diseño futurista. Permite a los clientes explorar productos y realizar pedidos. Cuenta con un servidor y una base de datos privados para una gestión eficiente y escalable.
-                </p>
-                <a href="https://www.asterixs.com.ar/" target="_blank" class="w-full text-center py-3 px-6 bg-red-700 text-white rounded-full font-bold uppercase tracking-wide neon-button">Ver Proyecto</a>
-            </div>
-
-            <!-- Proyecto: Ensintonia -->
-            <div class="bg-zinc-900 rounded-2xl shadow-xl p-6 md:p-8 flex flex-col items-center border-2 border-red-500">
-                <div class="w-full h-48 bg-cover bg-center rounded-xl mb-4" style="background-image: url('https://placehold.co/800x600/1a1a1a/ff3366?text=Ensintonia');"></div>
-                <h3 class="text-xl md:text-2xl font-bold text-red-400 mb-2">Ensintonia E-commerce</h3>
-                <span class="text-yellow-400 font-bold mb-4">Estado: En Producción</span>
-                <p class="text-gray-300 text-center flex-grow mb-4">
-                    Proyecto de e-commerce en su fase final de desarrollo. Diseñado con una interfaz de usuario moderna y minimalista, listo para ser lanzado y publicitado en Google Ads.
-                </p>
-                <a href="https://ensintonia-nuevo-y-moderno.vercel.app/index.html" target="_blank" class="w-full text-center py-3 px-6 bg-red-700 text-white rounded-full font-bold uppercase tracking-wide neon-button">Ver Demo</a>
-            </div>
-
-            <!-- Proyecto: Muebleria -->
-            <div class="bg-zinc-900 rounded-2xl shadow-xl p-6 md:p-8 flex flex-col items-center border-2 border-red-500">
-                <div class="w-full h-48 bg-cover bg-center rounded-xl mb-4" style="background-image: url('https://placehold.co/800x600/1a1a1a/ff3366?text=Muebleria');"></div>
-                <h3 class="text-xl md:text-2xl font-bold text-red-400 mb-2">Muebleria E-commerce</h3>
-                <span class="text-green-400 font-bold mb-4">Estado: Terminada</span>
-                <p class="text-gray-300 text-center flex-grow mb-4">
-                    E-commerce de muebles optimizado para ventas. Proporciona una experiencia de compra fluida y está preparado para ser publicitado y atraer clientes de manera efectiva.
-                </p>
-                <a href="https://www.respaldosomierluciano.com.ar" target="_blank" class="w-full text-center py-3 px-6 bg-red-700 text-white rounded-full font-bold uppercase tracking-wide neon-button">Ver Proyecto</a>
-            </div>
-
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">DEV<span>FUTURE</span></div>
+            <ul class="nav-links">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#projects">Proyectos</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
         </div>
+    </header>
 
-        <!-- Sección de contacto -->
-        <section class="mt-12 md:mt-20">
-            <div class="bg-zinc-900 rounded-2xl shadow-xl p-6 md:p-10 border-2 border-red-500">
-                <h2 class="text-2xl md:text-4xl font-bold text-red-400 mb-4 text-center">Contáctame</h2>
-                <p class="text-lg text-gray-300 text-center mb-8">
-                    ¿Listo para llevar tu negocio al siguiente nivel? ¡Hablemos de tu proyecto!
-                </p>
-                <form id="contact-form" class="space-y-6">
-                    <div>
-                        <label for="name" class="block text-gray-400 font-semibold mb-2">Nombre</label>
-                        <input type="text" id="name" name="name" class="w-full p-3 rounded-lg bg-zinc-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500" required>
-                    </div>
-                    <div>
-                        <label for="email" class="block text-gray-400 font-semibold mb-2">Email</label>
-                        <input type="email" id="email" name="email" class="w-full p-3 rounded-lg bg-zinc-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500" required>
-                    </div>
-                    <div>
-                        <label for="message" class="block text-gray-400 font-semibold mb-2">Mensaje</label>
-                        <textarea id="message" name="message" rows="4" class="w-full p-3 rounded-lg bg-zinc-800 text-white focus:outline-none focus:ring-2 focus:ring-red-500" required></textarea>
-                    </div>
-                    <button type="submit" class="w-full text-center py-3 px-6 bg-red-700 text-white rounded-full font-bold uppercase tracking-wide neon-button">Enviar Mensaje</button>
-                    <div id="success-message" class="hidden text-center mt-4 text-green-400 font-semibold">
-                        ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.
-                    </div>
-                </form>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1>Desarrollo Web <span>Futurista</span> para Negocios</h1>
+            <p>Creación de experiencias digitales avanzadas con tecnología de vanguardia. Desarrollos optimizados para publicidad y conversión de clientes.</p>
+            <a href="#projects" class="btn">Ver Proyectos <i class="fas fa-arrow-down"></i></a>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <div class="section-title">
+                <h2>Proyectos Destacados</h2>
             </div>
-        </section>
-    </main>
+            <div class="project-grid">
+                <!-- Proyecto 1 -->
+                <div class="memory-card float">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-content">
+                                <span class="project-status status-completed">Terminado</span>
+                                <h3>Asterixs E-commerce</h3>
+                                <div class="memory-image">
+                                    <img src="https://i.postimg.cc/1zFz0Zzt/Captura-de-pantalla-2025-09-03-230055.png" alt="Asterixs E-commerce">
+                                    <div class="glitch-effect"></div>
+                                </div>
+                                <p class="memory-preview">
+                                    Tienda online completa con carrito de compras, pasarela de pagos integrada y panel de administración...
+                                </p>
+                                <div class="card-glow"></div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-content">
+                                <h3>Asterixs E-commerce</h3>
+                                <p>
+                                    Tienda online completa con carrito de compras, pasarela de pagos integrada y panel de administración. 
+                                    Desarrollada con base de datos propia y servidor optimizado para publicidad. Sistema de gestión de 
+                                    inventario y seguimiento de pedidos en tiempo real.
+                                </p>
+                                <a href="https://www.asterixs.com.ar/" target="_blank" class="project-link">Visitar sitio <i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyecto 2 -->
+                <div class="memory-card float">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-content">
+                                <span class="project-status status-production">En Producción</span>
+                                <h3>EnSintonia E-commerce</h3>
+                                <div class="memory-image">
+                                    <img src="https://i.postimg.cc/C1HLtHkp/Captura-de-pantalla-2025-09-03-230122.png" alt="EnSintonia E-commerce">
+                                    <div class="glitch-effect"></div>
+                                </div>
+                                <p class="memory-preview">
+                                    E-commerce moderno con diseño responsive, integración con redes sociales y sistema de gestión...
+                                </p>
+                                <div class="card-glow"></div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-content">
+                                <h3>EnSintonia E-commerce</h3>
+                                <p>
+                                    E-commerce moderno con diseño responsive, integración con redes sociales y sistema de gestión de inventario. 
+                                    Próximo a lanzamiento con capacidad para campañas publicitarias. Incluye funcionalidades avanzadas de 
+                                    filtrado y recomendación de productos.
+                                </p>
+                                <a href="https://ensintonia-nuevo-y-moderno.vercel.app/index.html" target="_blank" class="project-link">Visitar preview <i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyecto 3 -->
+                <div class="memory-card float">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-content">
+                                <span class="project-status status-completed">Terminado</span>
+                                <h3>Mueblería Luciano</h3>
+                                <div class="memory-image">
+                                    <img src="https://i.postimg.cc/Cxz518Tb/Captura-de-pantalla-2025-09-03-230040.png" alt="Mueblería Luciano">
+                                    <div class="glitch-effect"></div>
+                                </div>
+                                <p class="memory-preview">
+                                    Sitio web para mueblería con catálogo de productos, formularios de contacto y sistema de cotizaciones...
+                                </p>
+                                <div class="card-glow"></div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-content">
+                                <h3>Mueblería Luciano</h3>
+                                <p>
+                         Sitio web para mueblería con catálogo de productos, formularios de contacto y sistema de cotizaciones. Optimizado para SEO y preparado para campañas de Google Ads. Diseño elegante que muestra los productos de manera atractiva y profesional.
+                                </p>
+                                <a href="https://www.respaldosomierluciano.com.ar" target="_blank" class="project-link">Visitar sitio <i class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <p>¿Interesado en un desarrollo web profesional para tu negocio? Contáctame para crear tu sitio web optimizado para publicidad y conversión de clientes.</p>
+                <ul class="social-links">
+                    <li><a href="https://wa.me/5491137725766" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                    <li><a href="mailto:maxilavagetto@gmail.com"><i class="far fa-envelope"></i></a></li>
+                    <li><a href="https://www.linkedin.com/in/maximo-lavagetto-b238332b9" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+                </ul>
+                <div class="copyright">
+                    <p>&copy; 2025 Portafolio . Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // JavaScript para generar partículas animadas en el fondo
-        const particlesContainer = document.querySelector('.particles-bg');
-        const numParticles = 30;
-
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            const size = Math.random() * 5 + 2; // Partículas de 2px a 7px
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            particle.style.left = `${Math.random() * 100}vw`;
-            particle.style.top = `${Math.random() * 100}vh`;
-            particle.style.animationDuration = `${Math.random() * 10 + 5}s`; // Duración de animación aleatoria
-            particlesContainer.appendChild(particle);
-        }
-
-        for (let i = 0; i < numParticles; i++) {
-            createParticle();
-        }
-
-        // Lógica del formulario de contacto
-        const form = document.getElementById('contact-form');
-        const successMessage = document.getElementById('success-message');
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Evita el envío real del formulario
-
-            // Simula el envío y muestra un mensaje de éxito
-            form.reset(); // Limpia los campos del formulario
-            successMessage.classList.remove('hidden');
-
-            // Opcional: Ocultar el mensaje después de unos segundos
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 5000);
+        // Crear partículas para el fondo
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamaño y posición aleatoria
+                const size = Math.random() * 10 + 2;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}vw`;
+                particle.style.top = `${posY}vh`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                // Color aleatorio (dorado o cian)
+                const colors = ['var(--accent)', 'var(--gold)'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Efecto de escritura para el título
+            const heroTitle = document.querySelector('.hero h1');
+            const originalText = heroTitle.innerHTML;
+            heroTitle.innerHTML = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < originalText.length) {
+                    heroTitle.innerHTML += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+            
+            setTimeout(typeWriter, 500);
+            
+            // Añadir funcionalidad de volteo a las tarjetas
+            const cards = document.querySelectorAll('.memory-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('flipped');
+                });
+            });
+            
+            // Añadir efecto de aparición suave al hacer scroll
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Aplicar a las tarjetas de proyecto
+            document.querySelectorAll('.memory-card').forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
         });
     </script>
 </body>
 </html>
-
