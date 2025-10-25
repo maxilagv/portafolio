@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio - Máximo Lavagetto | Desarrollador Full Stack</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- AOS Library para animaciones -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- GSAP para animaciones avanzadas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/gsap/3.12.2/TextPlugin.min.js"></script>
+    <!-- Three.js para efectos 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --dark-blue: #0056b3;
+            --accent-purple: #8b5cf6;
+            --accent-teal: #14b8a6;
+            --accent-orange: #f97316;
+            --accent-pink: #ec4899;
+            --dark-gray: #1f2937;
+            --light-gray: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: #e2e8f0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Efecto de vidrio para tarjetas */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+        }
+
+        /* Animación de brillo en hover */
+        .glow-on-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glow-on-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .glow-on-hover:hover::before {
+            left: 100%;
+        }
+
+        .glow-on-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Animación de entrada para elementos */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Efecto de partículas en el fondo */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Animación de onda en el botón */
+        .wave-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .wave-btn:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .wave-btn:focus:after,
+        .wave-btn:hover:after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(50, 50);
+                opacity: 0;
+            }
+        }
+
+        /* Animación de tarjeta giratoria */
+        .flip-card {
+            perspective: 1000px;
+            height: 300px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Efecto de neón para títulos */
+        .neon-text {
+            color: #fff;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 15px var(--primary-blue),
+                0 0 20px var(--primary-blue),
+                0 0 25px var(--primary-blue);
+            animation: neon-flicker 2s infinite alternate;
+        }
+
+        @keyframes neon-flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 
+                    0 0 5px #fff,
+                    0 0 10px #fff,
+                    0 0 15px var(--primary-blue),
+                    0 0 20px var(--primary-blue),
+                    0 0 25px var(--primary-blue);
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+            }
+        }
+
+        /* Efecto de cursor personalizado */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease;
+        }
+
+        /* Animación de gradiente de fondo */
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #475569);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        /* Efecto de texto máquina de escribir */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--primary-blue);
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-blue) }
+        }
+
+        /* Animación de flotación */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* Efecto de brillo en logos de tecnología */
+        .tech-logo {
+            transition: all 0.3s ease;
+            filter: grayscale(30%);
+            border-radius: 12px;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tech-logo:hover {
+            filter: grayscale(0%) brightness(120%);
+            transform: scale(1.1) rotate(5deg);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Secciones con altura completa */
+        .full-height-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Efecto de scroll suave para navegación */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animación de aparición de elementos en scroll */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Efecto de brillo en enlaces de navegación */
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            transform: translateX(0);
+        }
+
+        /* Efecto de destello en botones */
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shimmer-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.7s;
+        }
+
+        .shimmer-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Grid mejorado para tecnologías */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1.5rem;
+            place-items: center;
+        }
+
+        /* Animación de latido para íconos */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .tech-logo:hover img {
+            animation: heartbeat 0.5s ease-in-out;
+        }
+
+        /* Botones de acción en proyectos */
+        .project-btn {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Efecto de gradiente animado en texto */
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #8b5cf6 50%, #ec4899 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+    </style>
+</head>
+<body class="animated-bg">
+    <!-- Cursor personalizado -->
+    <div class="custom-cursor"></div>
+
+    <!-- Partículas de fondo -->
+    <div id="particles-js"></div>
+
+    <!-- Header/Navbar -->
+    <header class="fixed top-0 w-full z-50 glass-card py-4">
+        <nav class="container mx-auto px-6 flex justify-between items-center">
+            <div class="text-xl font-bold text-white neon-text">Máximo Lavagetto</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#inicio" class="nav-link text-white hover:text-blue-300 transition-colors py-2">Inicio</a>
+                <a href="#sobre-mi" class="nav-link text-white hover:text-blue-300 transition-colors py-2">Sobre Mí</a>
+                <a href="#experiencia" class="nav-link text-white hover:text-blue-300 transition-colors py-2">Experiencia</a>
+                <a href="#proyectos" class="nav-link text-white hover:text-blue-300 transition-colors py-2">Proyectos</a>
+                <a href="#habilidades" class="nav-link text-white hover:text-blue-300 transition-colors py-2">Habilidades</a>
+                <a href="#contacto" class="nav-link text-white hover:text-blue-300 transition-colors py-2">Contacto</a>
+            </div>
+            <button class="md:hidden text-white">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Sección Hero -->
+    <section id="inicio" class="full-height-section relative overflow-hidden">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-8 floating">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 typewriter">Máximo Lavagetto</h1>
+                <p class="text-xl md:text-2xl text-blue-300 mb-8 fade-in-up">Desarrollador Full Stack | Ingeniería de Software</p>
+            </div>
+            <div class="max-w-3xl mx-auto fade-in-up">
+                <p class="text-lg text-gray-300 mb-10 leading-relaxed">
+                    Transformo ideas en <span class="text-blue-400 font-semibold">soluciones digitales escalables</span> que impulsan el crecimiento empresarial. 
+                    Mi enfoque combina <span class="text-purple-400 font-semibold">tecnología de vanguardia</span> con una comprensión profunda de las necesidades del negocio.
+                </p>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <a href="#proyectos" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium wave-btn glow-on-hover shimmer-btn">
+                        Ver Proyectos
+                    </a>
+                    <a href="#contacto" class="px-8 py-4 border-2 border-blue-500 text-blue-400 rounded-full font-medium wave-btn glow-on-hover shimmer-btn">
+                        Contactar
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#sobre-mi" class="text-blue-400">
+                <i data-lucide="chevron-down" class="w-8 h-8"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Sección Sobre Mí -->
+    <section id="sobre-mi" class="full-height-section py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 neon-text" data-aos="fade-up">¿Por Qué Sería Valioso Para Su Empresa?</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right" data-aos-delay="200">
+                    <div class="glass-card p-8 rounded-2xl glow-on-hover h-full">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-400 flex items-center">
+                            <i data-lucide="target" class="w-6 h-6 mr-3"></i>
+                            Mi Enfoque
+                        </h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Como desarrollador Full Stack, no solo construyo aplicaciones, sino que diseño <span class="text-blue-300 font-medium">arquitecturas que crecen con su negocio</span>. 
+                            Mi experiencia abarca desde startups hasta sistemas empresariales complejos, siempre con un enfoque en <span class="text-purple-300 font-medium">escalabilidad, seguridad y mantenibilidad</span>.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mr-3"></i>
+                                <span class="text-gray-300">Desarrollo soluciones que se adaptan a la evolución de su empresa</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mr-3"></i>
+                                <span class="text-gray-300">Implemento mejores prácticas que reducen costos de mantenimiento</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mr-3"></i>
+                                <span class="text-gray-300">Optimizo procesos mediante automatización y arquitecturas eficientes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div data-aos="fade-left" data-aos-delay="400">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front glass-card rounded-2xl">
+                                <h3 class="text-2xl font-bold mb-4 text-blue-400 flex items-center">
+                                    <i data-lucide="award" class="w-6 h-6 mr-3"></i>
+                                    Mi Valor
+                                </h3>
+                                <p class="text-gray-300 leading-relaxed">
+                                    Combino conocimientos técnicos profundos con una comprensión empresarial 
+                                    que me permite identificar oportunidades de mejora y proponer soluciones 
+                                    que generan <span class="text-teal-300 font-medium">impacto real</span> en los objetivos de la organización.
+                                </p>
+                            </div>
+                            <div class="flip-card-back bg-gradient-to-br from-blue-700 to-purple-700 text-white rounded-2xl">
+                                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                                    <i data-lucide="trending-up" class="w-6 h-6 mr-3"></i>
+                                    Resultados Tangibles
+                                </h3>
+                                <ul class="text-left space-y-3">
+                                    <li class="flex items-start">
+                                        <i data-lucide="zap" class="w-5 h-5 text-yellow-400 mr-2 mt-1"></i>
+                                        <span>Migración exitosa de sistemas críticos</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i data-lucide="bar-chart" class="w-5 h-5 text-green-400 mr-2 mt-1"></i>
+                                        <span>Reducción de tiempos de procesamiento en un 40%</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i data-lucide="shield" class="w-5 h-5 text-blue-400 mr-2 mt-1"></i>
+                                        <span>Implementación de seguridad robusta</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i data-lucide="layers" class="w-5 h-5 text-purple-400 mr-2 mt-1"></i>
+                                        <span>Arquitecturas que soportan crecimiento exponencial</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Experiencia -->
+    <section id="experiencia" class="full-height-section py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 neon-text" data-aos="fade-up">Experiencia Profesional</h2>
+            
+            <div class="max-w-4xl mx-auto space-y-10">
+                <!-- Experiencia 1 - Ensintonia -->
+                <div class="glass-card p-8 rounded-2xl glow-on-hover scroll-reveal" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex flex-col md:flex-row justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Ensintonia</h3>
+                            <p class="text-blue-400 font-semibold text-lg">Desarrollador Backend & Arquitectura de Sistemas</p>
+                        </div>
+                        <span class="text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 rounded-full mt-2 md:mt-0 self-start">Actualidad</span>
+                    </div>
+                    <ul class="list-none text-gray-300 space-y-3">
+                        <li class="flex items-start">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-blue-400 mr-2 mt-1"></i>
+                            <span>Responsable de la migración del sistema desde Firebase hacia infraestructura propia con servidor y base de datos independiente.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-blue-400 mr-2 mt-1"></i>
+                            <span>Desarrollo de panel administrativo modular (logística, clientes, ABM) y carrito con integración de pagos y cifrado.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-blue-400 mr-2 mt-1"></i>
+                            <span><span class="font-semibold text-blue-300">Stack:</span> Node.js, Express, SQL, Angular, Tailwind.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-4 border-t border-gray-700">
+                        <p class="text-blue-300 font-medium flex items-center mb-4">
+                            <i data-lucide="star" class="w-4 h-4 mr-2"></i>
+                            Valor para la empresa: Infraestructura escalable que reduce costos operativos y mejora la seguridad.
+                        </p>
+                        <a href="https://ensintoniacompleto-dw51gnnco-maximos-projects-c38e84e9.vercel.app" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg project-btn wave-btn">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            Ver Página Web
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Experiencia 2 - Movicel -->
+                <div class="glass-card p-8 rounded-2xl glow-on-hover scroll-reveal" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex flex-col md:flex-row justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Movicel</h3>
+                            <p class="text-blue-400 font-semibold text-lg">Desarrollador Full Stack | Backend & Administración de Datos</p>
+                        </div>
+                    </div>
+                    <ul class="list-none text-gray-300 space-y-3">
+                        <li class="flex items-start">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-blue-400 mr-2 mt-1"></i>
+                            <span>Lideré el desarrollo de un backend completo en Node.js con Express y base de datos PostgreSQL.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-blue-400 mr-2 mt-1"></i>
+                            <span>Implementación de roles, autenticación, cifrado de datos y lógica de negocio escalable.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-blue-400 mr-2 mt-1"></i>
+                            <span><span class="font-semibold text-blue-300">Stack:</span> Node.js, Express, SQL, PostgreSQL, Angular.js, TypeScript.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-4 border-t border-gray-700">
+                        <p class="text-blue-300 font-medium flex items-center mb-4">
+                            <i data-lucide="star" class="w-4 h-4 mr-2"></i>
+                            Valor para la empresa: Sistema robusto que maneja datos sensibles con máxima seguridad y eficiencia.
+                        </p>
+                        <a href="https://movicel-q35v.vercel.app" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg project-btn wave-btn">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            Ver Página Web
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Proyectos -->
+    <section id="proyectos" class="full-height-section py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 neon-text" data-aos="fade-up">Proyectos Destacados</h2>
+            
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Proyecto 1 - Sistema de Scoring Crediticio -->
+                <div class="glass-card p-8 rounded-2xl glow-on-hover scroll-reveal" data-aos="zoom-in" data-aos-delay="100">
+                    <h3 class="text-2xl font-bold text-white mb-4">Sistema Automatizado de Scoring Crediticio</h3>
+                    <p class="text-blue-300 italic mb-6">Análisis de riesgo financiero y reportes automáticos</p>
+                    <p class="text-gray-300 mb-6">Desarrollo de un sistema de scoring crediticio con modelo propio, validación de usuarios y manejo seguro de datos. Integración Full Stack para análisis de riesgo y generación de reportes.</p>
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <span class="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-sm">Python</span>
+                        <span class="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-sm">SQL</span>
+                        <span class="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-sm">Node.js</span>
+                        <span class="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-sm">Express</span>
+                        <span class="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-sm">React</span>
+                    </div>
+                    <div class="pt-4 border-t border-gray-700">
+                        <p class="text-blue-300 font-medium flex items-center mb-4">
+                            <i data-lucide="target" class="w-4 h-4 mr-2"></i>
+                            Impacto empresarial: Reducción del 60% en tiempo de evaluación de riesgos y aumento de precisión en decisiones crediticias.
+                        </p>
+                        <a href="https://github.com/maxilagv/sistema-scoring-credito" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg project-btn wave-btn">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                            Ver Repositorio
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Proyecto 2 - Sistema ERP Modular -->
+                <div class="glass-card p-8 rounded-2xl glow-on-hover scroll-reveal" data-aos="zoom-in" data-aos-delay="200">
+                    <h3 class="text-2xl font-bold text-white mb-4">Sistema de Gestión Empresarial (ERP Modular)</h3>
+                    <p class="text-blue-300 italic mb-6">Arquitectura empresarial y Clean Architecture</p>
+                    <p class="text-gray-300 mb-6">Proyecto orientado a demostrar dominio de arquitectura empresarial. Desarrollo de módulos independientes (RRHH, Ventas, Inventario, Finanzas) comunicados por APIs REST, aplicando patrones MVC y Clean Architecture.</p>
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <span class="px-3 py-1 bg-purple-900/50 text-purple-300 rounded-full text-sm">Java</span>
+                        <span class="px-3 py-1 bg-purple-900/50 text-purple-300 rounded-full text-sm">Spring Boot</span>
+                        <span class="px-3 py-1 bg-purple-900/50 text-purple-300 rounded-full text-sm">SQL</span>
+                        <span class="px-3 py-1 bg-purple-900/50 text-purple-300 rounded-full text-sm">Angular</span>
+                        <span class="px-3 py-1 bg-purple-900/50 text-purple-300 rounded-full text-sm">REST APIs</span>
+                    </div>
+                    <div class="pt-4 border-t border-gray-700">
+                        <p class="text-blue-300 font-medium flex items-center mb-4">
+                            <i data-lucide="target" class="w-4 h-4 mr-2"></i>
+                            Impacto empresarial: Unificación de procesos que reduce duplicación de esfuerzos en un 45% y mejora la toma de decisiones.
+                        </p>
+                        <a href="https://github.com/maxilagv/Sistema-de-Gesti-n-Empresarial-ERP-Modular-" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg project-btn wave-btn">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                            Ver Repositorio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Habilidades -->
+    <section id="habilidades" class="full-height-section py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 neon-text" data-aos="fade-up">Habilidades Técnicas</h2>
+            
+            <div class="max-w-6xl mx-auto">
+                <div class="glass-card p-8 rounded-2xl mb-12" data-aos="fade-up">
+                    <h3 class="text-2xl font-bold mb-8 text-blue-400 text-center flex items-center justify-center">
+                        <i data-lucide="code" class="w-6 h-6 mr-3"></i>
+                        Tecnologías Principales
+                    </h3>
+                    
+                    <div class="tech-grid">
+                        <!-- JavaScript -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" class="w-16 h-16 mb-3" alt="JavaScript">
+                            <span class="text-sm text-gray-300 font-medium">JavaScript</span>
+                        </div>
+                        
+                        <!-- TypeScript -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" class="w-16 h-16 mb-3" alt="TypeScript">
+                            <span class="text-sm text-gray-300 font-medium">TypeScript</span>
+                        </div>
+                        
+                        <!-- Node.js -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" class="w-16 h-16 mb-3" alt="Node.js">
+                            <span class="text-sm text-gray-300 font-medium">Node.js</span>
+                        </div>
+                        
+                        <!-- Angular -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" class="w-16 h-16 mb-3" alt="Angular">
+                            <span class="text-sm text-gray-300 font-medium">Angular</span>
+                        </div>
+                        
+                        <!-- React -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" class="w-16 h-16 mb-3" alt="React">
+                            <span class="text-sm text-gray-300 font-medium">React</span>
+                        </div>
+                        
+                        <!-- HTML5 -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" class="w-16 h-16 mb-3" alt="HTML5">
+                            <span class="text-sm text-gray-300 font-medium">HTML5</span>
+                        </div>
+                        
+                        <!-- CSS3 -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" class="w-16 h-16 mb-3" alt="CSS3">
+                            <span class="text-sm text-gray-300 font-medium">CSS3</span>
+                        </div>
+                        
+                        <!-- Java -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" class="w-16 h-16 mb-3" alt="Java">
+                            <span class="text-sm text-gray-300 font-medium">Java</span>
+                        </div>
+                        
+                        <!-- Python -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="w-16 h-16 mb-3" alt="Python">
+                            <span class="text-sm text-gray-300 font-medium">Python</span>
+                        </div>
+                        
+                        <!-- C# -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" class="w-16 h-16 mb-3" alt="C#">
+                            <span class="text-sm text-gray-300 font-medium">C#</span>
+                        </div>
+                        
+                        <!-- PostgreSQL -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" class="w-16 h-16 mb-3" alt="PostgreSQL">
+                            <span class="text-sm text-gray-300 font-medium">PostgreSQL</span>
+                        </div>
+                        
+                        <!-- Git -->
+                        <div class="tech-logo glow-on-hover">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="w-16 h-16 mb-3" alt="Git">
+                            <span class="text-sm text-gray-300 font-medium">Git</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div data-aos="fade-right" data-aos-delay="200">
+                        <div class="glass-card p-8 rounded-2xl h-full">
+                            <h3 class="text-2xl font-bold mb-6 text-blue-400 flex items-center">
+                                <i data-lucide="layers" class="w-6 h-6 mr-3"></i>
+                                Competencias Clave
+                            </h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-semibold text-white mb-3 flex items-center">
+                                        <i data-lucide="git-branch" class="w-5 h-5 mr-2 text-purple-400"></i>
+                                        Arquitectura de Software
+                                    </h4>
+                                    <p class="text-sm text-gray-300">Diseño de sistemas escalables, patrones MVC, Clean Architecture, microservicios.</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-white mb-3 flex items-center">
+                                        <i data-lucide="shield" class="w-5 h-5 mr-2 text-green-400"></i>
+                                        Seguridad y Optimización
+                                    </h4>
+                                    <p class="text-sm text-gray-300">JWT, cifrado de datos, protección contra vulnerabilidades, optimización de rendimiento.</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-white mb-3 flex items-center">
+                                        <i data-lucide="link" class="w-5 h-5 mr-2 text-blue-400"></i>
+                                        Integración y APIs
+                                    </h4>
+                                    <p class="text-sm text-gray-300">REST APIs, integración de servicios de pago, autenticación de terceros.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div data-aos="fade-left" data-aos-delay="400">
+                        <div class="glass-card p-8 rounded-2xl h-full">
+                            <h3 class="text-2xl font-bold mb-6 text-blue-400 flex items-center">
+                                <i data-lucide="cloud" class="w-6 h-6 mr-3"></i>
+                                DevOps & Herramientas
+                            </h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-semibold text-white mb-3 flex items-center">
+                                        <i data-lucide="server" class="w-5 h-5 mr-2 text-teal-400"></i>
+                                        Deployment & Cloud
+                                    </h4>
+                                    <p class="text-sm text-gray-300">CI/CD, Render, Vercel, Cloudinary, administración de servidores.</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-white mb-3 flex items-center">
+                                        <i data-lucide="database" class="w-5 h-5 mr-2 text-orange-400"></i>
+                                        Bases de Datos
+                                    </h4>
+                                    <p class="text-sm text-gray-300">PostgreSQL, Firebase, SQL Server, diseño de esquemas y optimización.</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-semibold text-white mb-3 flex items-center">
+                                        <i data-lucide="box" class="w-5 h-5 mr-2 text-pink-400"></i>
+                                        Metodologías
+                                    </h4>
+                                    <p class="text-sm text-gray-300">Agile, Scrum, Clean Code, TDD, versionado con Git/GitHub.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Contacto -->
+    <section id="contacto" class="full-height-section py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 neon-text" data-aos="fade-up">
+                <span class="gradient-text">Experiencia Completa en Desarrollo Web</span>
+            </h2>
+            
+            <div class="max-w-4xl mx-auto text-center" data-aos="zoom-in" data-aos-delay="200">
+                <div class="glass-card p-8 rounded-2xl mb-8">
+                    <p class="text-2xl md:text-3xl text-gray-300 mb-6 leading-relaxed">
+                        <span class="text-blue-400 font-bold">Frontend de alto rendimiento</span> + 
+                        <span class="text-purple-400 font-bold">Backend escalable</span> = 
+                        <span class="gradient-text font-bold">Soluciones completas y eficientes</span>
+                    </p>
+                    
+                    <p class="text-lg text-gray-400 mb-8">
+                        Domino tanto la creación de interfaces de usuario modernas y responsivas como el desarrollo 
+                        de arquitecturas backend robustas. Esta combinación me permite entregar productos digitales 
+                        completos, optimizados y listos para escalar.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-green-400 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <h4 class="font-semibold text-white">Frontend Avanzado</h4>
+                                <p class="text-sm text-gray-400">Interfaces modernas, UX optimizada, aplicaciones SPA</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-green-400 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <h4 class="font-semibold text-white">Backend Solido</h4>
+                                <p class="text-sm text-gray-400">APIs REST, bases de datos, seguridad, microservicios</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 mb-12">
+                    <a href="mailto:maxilavagetto@gmail.com" class="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 rounded-full font-medium wave-btn glow-on-hover shimmer-btn">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        <span>maxilavagetto@gmail.com</span>
+                    </a>
+                    <a href="tel:+5401137725766" class="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 rounded-full font-medium wave-btn glow-on-hover shimmer-btn">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
+                        <span>(54) 011 3772 5766</span>
+                    </a>
+                </div>
+                
+                <div class="flex justify-center space-x-8">
+                    <a href="https://github.com/maxilagv" target="_blank" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full wave-btn glow-on-hover shimmer-btn">
+                        <i data-lucide="github" class="w-6 h-6"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/maximo-lavagetto-b238332b9" target="_blank" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full wave-btn glow-on-hover shimmer-btn">
+                        <i data-lucide="linkedin" class="w-6 h-6"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/80 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400">© 2023 Máximo Lavagetto. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Inicialización de Lucide Icons
+        lucide.createIcons();
+        
+        // Inicialización de AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Configuración de partículas
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#3b82f6" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#8b5cf6",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            }
+        });
+        
+        // Efecto de cursor personalizado
+        function initCustomCursor() {
+            const cursor = document.querySelector('.custom-cursor');
+            
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+            
+            // Efecto al pasar sobre elementos interactivos
+            const interactiveElements = document.querySelectorAll('a, button, .glow-on-hover, .tech-logo');
+            
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'scale(1.5)';
+                });
+                
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'scale(1)';
+                });
+            });
+        }
+        
+        // Animación de elementos al hacer scroll
+        function initScrollAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-in-up');
+            const scrollElements = document.querySelectorAll('.scroll-reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => {
+                observer.observe(el);
+            });
+            
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            scrollElements.forEach(el => {
+                scrollObserver.observe(el);
+            });
+        }
+        
+        // Animación de texto con GSAP
+        function initTextAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Animación de títulos principales
+            gsap.utils.toArray('.neon-text').forEach(title => {
+                gsap.from(title, {
+                    scrollTrigger: {
+                        trigger: title,
+                        start: "top 80%",
+                        end: "bottom 20%",
+                        toggleActions: "play none none reverse"
+                    },
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+            
+            // Animación de tarjetas
+            gsap.utils.toArray('.glass-card').forEach(card => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%",
+                        end: "bottom 20%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+        }
+        
+        // Inicialización cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            initCustomCursor();
+            initScrollAnimations();
+            initTextAnimations();
+            
+            // Efecto de máquina de escribir para el título
+            const typewriterElement = document.querySelector('.typewriter');
+            if (typewriterElement) {
+                const text = typewriterElement.textContent;
+                typewriterElement.textContent = '';
+                
+                let i = 0;
+                const typeWriter = () => {
+                    if (i < text.length) {
+                        typewriterElement.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 100);
+                    } else {
+                        typewriterElement.style.borderRight = 'none';
+                    }
+                };
+                
+                setTimeout(typeWriter, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
